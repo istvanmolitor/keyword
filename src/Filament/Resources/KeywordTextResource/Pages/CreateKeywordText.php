@@ -4,6 +4,7 @@ namespace Molitor\Keyword\Filament\Resources\KeywordTextResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
 use Molitor\Keyword\Filament\Resources\KeywordTextResource;
+use Molitor\Keyword\Services\KeywordService;
 
 class CreateKeywordText extends CreateRecord
 {
@@ -17,6 +18,13 @@ class CreateKeywordText extends CreateRecord
     public function getTitle(): string
     {
         return 'Új kulcsszó szöveg';
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $keywordService = app(KeywordService::class);
+        $data['tokens'] = $keywordService->getTokensString($data['text']);
+        return $data;
     }
 }
 

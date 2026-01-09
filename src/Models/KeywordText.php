@@ -9,6 +9,7 @@ class KeywordText extends Model
 {
     protected $fillable = [
         'text',
+        'tokens',
     ];
 
     public $timestamps = true;

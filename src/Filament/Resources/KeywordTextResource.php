@@ -6,10 +6,10 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms;
+use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Molitor\Keyword\Filament\Resources\KeywordTextResource\Pages;
 use Molitor\Keyword\Models\KeywordText;
@@ -36,18 +36,12 @@ class KeywordTextResource extends Resource
     {
         return $schema
             ->schema([
-                Forms\Components\Textarea::make('text')
+                Textarea::make('text')
                     ->label('Szöveg')
                     ->required()
                     ->maxLength(65535)
                     ->rows(5)
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('tokens')
-                    ->label('Tokenek (automatikusan generált)')
-                    ->disabled()
-                    ->rows(3)
-                    ->columnSpanFull()
-                    ->dehydrated(false),
             ]);
     }
 
@@ -55,25 +49,25 @@ class KeywordTextResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('text')
+                TextColumn::make('text')
                     ->label('Szöveg')
                     ->searchable()
                     ->limit(50)
                     ->wrap(),
-                Tables\Columns\TextColumn::make('tokens')
+                TextColumn::make('tokens')
                     ->label('Tokenek')
                     ->searchable()
                     ->limit(30)
                     ->wrap(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Létrehozva')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label('Módosítva')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()

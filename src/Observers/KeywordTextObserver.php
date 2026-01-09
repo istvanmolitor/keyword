@@ -17,9 +17,7 @@ class KeywordTextObserver
      */
     public function creating(KeywordText $keywordText): void
     {
-        if (!empty($keywordText->text)) {
-            $keywordText->tokens = $this->keywordService->getTokensString($keywordText->text);
-        }
+        $keywordText->tokens = $this->keywordService->getTokensString($keywordText->text);
     }
 
     /**
@@ -27,9 +25,7 @@ class KeywordTextObserver
      */
     public function updating(KeywordText $keywordText): void
     {
-        if (!empty($keywordText->text)) {
-            $keywordText->tokens = $this->keywordService->getTokensString($keywordText->text);
-        }
+        $keywordText->tokens = $this->keywordService->getTokensString($keywordText->text);
     }
 }
 

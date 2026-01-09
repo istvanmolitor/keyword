@@ -62,7 +62,7 @@ class KeywordService
 
         foreach ($keywords as $keyword) {
             if(!isset($this->keywords[$keyword])) {
-                $newKeywords[] = $this->keywords[$keyword];
+                $newKeywords[] = $keyword;
             }
         }
 
@@ -72,7 +72,7 @@ class KeywordService
     public function createKeywords(string $text): void
     {
         $uniqueWords = $this->getUniqueWords($text);
-        if (!count($uniqueWords)) {
+        if (count($uniqueWords)) {
             $newKeywords = $this->getNewKeywords($uniqueWords);
             if(count($newKeywords)) {
                 $this->keywordRepository->create($newKeywords);
@@ -83,6 +83,10 @@ class KeywordService
 
     public function getTokens(string $text): array
     {
+        if(empty($text))
+        {
+            return [];
+        }
         $this->createKeywords($text);
 
         if (!$this->loaded) {
@@ -105,7 +109,4 @@ class KeywordService
     {
         return implode(',', $this->getTokens($text));
     }
-
-
-
 }
