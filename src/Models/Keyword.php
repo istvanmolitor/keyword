@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Keyword extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'name',
         'is_stop_word',
         'alias_keyword_id',
+    ];
+
+    protected $casts = [
+        'is_stop_word' => 'boolean',
     ];
 
     public function aliasKeyword(): BelongsTo

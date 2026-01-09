@@ -2,6 +2,8 @@
 
 namespace Molitor\Keyword\Services;
 
+use http\Encoding\Stream\Inflate;
+use Molitor\Keyword\Models\KeywordText;
 use Molitor\Keyword\Repositories\KeywordRepositoryInterface;
 
 class KeywordService
@@ -67,6 +69,15 @@ class KeywordService
         return $keywordIds;
     }
 
+    public function getTokens(string $text): array
+    {
+        return [];
+    }
+
+    public function getTokensString(string $text): string
+    {
+        return implode(',', $this->getTokens($text));
+    }
 
 
 
