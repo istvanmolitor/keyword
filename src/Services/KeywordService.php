@@ -2,16 +2,16 @@
 
 namespace Molitor\Keyword\Services;
 
-use http\Encoding\Stream\Inflate;
-use Molitor\Keyword\Models\KeywordText;
 use Molitor\Keyword\Repositories\KeywordRepositoryInterface;
 
 class KeywordService
 {
+    private bool $loaded = false;
     private array $keywords = [];
 
     public function loadKeywords(): void
     {
+        $this->loaded = true;
         $this->keywords = [];
         foreach ($this->keywordRepository->all() as $keyword) {
             $this->keywords[$keyword->name] = $keyword->alias_keyword_id ?? $keyword->id;
@@ -46,32 +46,59 @@ class KeywordService
         return array_unique($words);
     }
 
-    /**
-     * Kulcsszavakra bontja a szöveget és elmenti az adatbázisba.
-     *
-     * @param string $text A feldolgozandó szöveg
-     * @return array A létrehozott/megtalált kulcsszavak ID-i növekvő sorrendben
-     */
-    public function createKeywords(string $text): array
+    public function flushKeywords(): void
     {
-        $uniqueWords = $this->getUniqueWords($text);
+        $this->keywords = [];
+        $this->loaded = false;
+    }
 
-        if (empty($uniqueWords)) {
-            return [];
+    public function getNewKeywords(array $keywords): array
+    {
+        $newKeywords = [];
+
+        if(!$this->loaded) {
+            $this->loadKeywords();
         }
 
-        $this->keywordRepository->create($uniqueWords);
+        foreach ($keywords as $keyword) {
+            if(!isset($this->keywords[$keyword])) {
+                $newKeywords[] = $this->keywords[$keyword];
+            }
+        }
 
-        // ID-k gyűjtése és növekvő sorrendbe rendezése
-        $keywordIds = $keywords->pluck('id')->toArray();
-        sort($keywordIds);
+        return $newKeywords;
+    }
 
-        return $keywordIds;
+    public function createKeywords(string $text): void
+    {
+        $uniqueWords = $this->getUniqueWords($text);
+        if (!count($uniqueWords)) {
+            $newKeywords = $this->getNewKeywords($uniqueWords);
+            if(count($newKeywords)) {
+                $this->keywordRepository->create($newKeywords);
+                $this->flushKeywords();
+            }
+        }
     }
 
     public function getTokens(string $text): array
     {
-        return [];
+        $this->createKeywords($text);
+
+        if (!$this->loaded) {
+            $this->loadKeywords();
+        }
+
+        $uniqueWords = $this->getUniqueWords($text);
+        $tokens = [];
+
+        foreach ($uniqueWords as $word) {
+            if (isset($this->keywords[$word])) {
+                $tokens[] = $this->keywords[$word];
+            }
+        }
+
+        return array_unique($tokens);
     }
 
     public function getTokensString(string $text): string
