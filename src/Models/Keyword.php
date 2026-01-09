@@ -10,15 +10,16 @@ class Keyword extends Model
 {
     protected $fillable = [
         'name',
+        'is_stop_word',
         'alias_keyword_id',
     ];
 
-    public function parent(): BelongsTo
+    public function aliasKeyword(): BelongsTo
     {
         return $this->belongsTo(Keyword::class, 'alias_keyword_id');
     }
 
-    public function aliases(): HasMany
+    public function replacedKeywords(): HasMany
     {
         return $this->hasMany(Keyword::class, 'alias_keyword_id');
     }
