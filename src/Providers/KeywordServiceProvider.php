@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Molitor\Keyword\Console\Commands\DeleteAllKeywordsCommand;
 use Molitor\Keyword\Repositories\KeywordRepository;
 use Molitor\Keyword\Repositories\KeywordRepositoryInterface;
+use Molitor\Keyword\Services\KeywordService;
 
 class KeywordServiceProvider extends ServiceProvider
 {
@@ -28,5 +29,6 @@ class KeywordServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(KeywordRepositoryInterface::class, KeywordRepository::class);
+        $this->app->singleton(KeywordService::class);
     }
 }
