@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Molitor\Keyword\Console\Commands\DeleteAllKeywordsCommand;
 use Molitor\Keyword\Repositories\KeywordableRepository;
 use Molitor\Keyword\Repositories\KeywordableRepositoryInterface;
+use Molitor\Keyword\Repositories\KeywordGroupRepository;
+use Molitor\Keyword\Repositories\KeywordGroupRepositoryInterface;
 use Molitor\Keyword\Repositories\KeywordRepository;
 use Molitor\Keyword\Repositories\KeywordRepositoryInterface;
 use Molitor\Keyword\Services\KeywordService;
@@ -32,6 +34,7 @@ class KeywordServiceProvider extends ServiceProvider
     {
         $this->app->bind(KeywordRepositoryInterface::class, KeywordRepository::class);
         $this->app->bind(KeywordableRepositoryInterface::class, KeywordableRepository::class);
+        $this->app->bind(KeywordGroupRepositoryInterface::class, KeywordGroupRepository::class);
         $this->app->singleton(KeywordService::class);
     }
 }

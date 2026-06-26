@@ -34,4 +34,11 @@ return [
         'updated' => 'A kulcsszó sikeresen frissítve.',
         'deleted' => 'A kulcsszó sikeresen törölve.',
     ],
+    'groups' => [
+        'messages' => [
+            'created' => 'A kulcsszó-csoport sikeresen létrejött.',
+            'updated' => 'A kulcsszó-csoport sikeresen frissítve.',
+            'deleted' => 'A kulcsszó-csoport sikeresen törölve.',
+        ],
+    ],
 ];
