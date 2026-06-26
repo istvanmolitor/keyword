@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('keywords', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->foreignId('alias_keyword_id')->nullable();
             $table->boolean('is_stop_word')->default(false);
         });

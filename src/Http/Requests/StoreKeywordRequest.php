@@ -15,6 +15,7 @@ class StoreKeywordRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255|unique:keywords,name',
+            'slug' => 'required|string|max:255|unique:keywords,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
             'is_stop_word' => 'nullable|boolean',
             'alias_keyword_id' => 'nullable|integer|exists:keywords,id',
         ];

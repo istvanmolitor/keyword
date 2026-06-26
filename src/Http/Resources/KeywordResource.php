@@ -12,6 +12,7 @@ class KeywordResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'slug' => $this->slug,
             'is_stop_word' => (bool) $this->is_stop_word,
             'alias_keyword_id' => $this->alias_keyword_id,
             'alias_keyword' => $this->whenLoaded('aliasKeyword', fn () => $this->aliasKeyword ? [
