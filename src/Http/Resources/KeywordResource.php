@@ -19,6 +19,7 @@ class KeywordResource extends JsonResource
                 'id' => $this->aliasKeyword->id,
                 'name' => $this->aliasKeyword->name,
             ] : null),
+            'keywordables_count' => (int) ($this->keywordables_count ?? 0),
         ];
     }
 }

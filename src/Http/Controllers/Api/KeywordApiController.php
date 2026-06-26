@@ -5,6 +5,7 @@ namespace Molitor\Keyword\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Molitor\Admin\Traits\HasAdminFilters;
 use Molitor\Keyword\Http\Requests\StoreKeywordRequest;
 use Molitor\Keyword\Http\Requests\UpdateKeywordRequest;
@@ -18,7 +19,9 @@ class KeywordApiController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = Keyword::query()->with('aliasKeyword');
+        $query = Keyword::query()
+            ->with('aliasKeyword')
+            ->select('keywords.*', DB::raw('(SELECT COUNT(*) FROM keywordables WHERE keywordables.keyword_id = keywords.id) as keywordables_count'));
         $keywords = $this->applyAdminFilters($query, $request, ['name'])
             ->paginate(10)
             ->withQueryString();
