@@ -13,6 +13,8 @@ interface KeywordRepositoryInterface
 
     public function getByName(string $name): ?Keyword;
 
+    public function getBySlug(string $slug): ?Keyword;
+
     public function create(array $keywords): void;
 
     public function update(Keyword $keyword, array $data): bool;

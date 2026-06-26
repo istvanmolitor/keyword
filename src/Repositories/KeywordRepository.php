@@ -26,6 +26,11 @@ class KeywordRepository implements KeywordRepositoryInterface
         return $this->keyword->find($id);
     }
 
+    public function getBySlug(string $slug): ?Keyword
+    {
+        return $this->keyword->where('slug', $slug)->first();
+    }
+
     public function getByName(string $name): ?Keyword
     {
         if (!isset($this->cache[$name])) {
