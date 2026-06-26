@@ -9,6 +9,7 @@ use Molitor\Admin\Traits\HasAdminFilters;
 use Molitor\Keyword\Http\Requests\KeywordGroup\StoreKeywordGroupRequest;
 use Molitor\Keyword\Http\Requests\KeywordGroup\UpdateKeywordGroupRequest;
 use Molitor\Keyword\Http\Resources\KeywordGroupResource;
+use Molitor\Keyword\Models\Keyword;
 use Molitor\Keyword\Models\KeywordGroup;
 
 class KeywordGroupApiController extends Controller
@@ -36,9 +37,26 @@ class KeywordGroupApiController extends Controller
 
     public function show(KeywordGroup $keywordGroup): JsonResponse
     {
+        $keywordGroup->load('keywords');
+
         return response()->json([
             'data' => new KeywordGroupResource($keywordGroup),
         ]);
+    }
+
+    public function attachKeyword(Request $request, KeywordGroup $keywordGroup): JsonResponse
+    {
+        $request->validate(['keyword_id' => 'required|exists:keywords,id']);
+        $keywordGroup->keywords()->syncWithoutDetaching([$request->keyword_id]);
+
+        return response()->json(['message' => 'Kulcsszó hozzáadva.']);
+    }
+
+    public function detachKeyword(KeywordGroup $keywordGroup, Keyword $keyword): JsonResponse
+    {
+        $keywordGroup->keywords()->detach($keyword->id);
+
+        return response()->json(['message' => 'Kulcsszó eltávolítva.']);
     }
 
     public function store(StoreKeywordGroupRequest $request): JsonResponse

@@ -10,4 +10,6 @@ Route::prefix('admin/keyword')
     ->group(function () {
         Route::resource('keywords', KeywordApiController::class);
         Route::resource('keyword-groups', KeywordGroupApiController::class);
+        Route::post('keyword-groups/{keywordGroup}/keywords', [KeywordGroupApiController::class, 'attachKeyword'])->name('keyword-groups.keywords.attach');
+        Route::delete('keyword-groups/{keywordGroup}/keywords/{keyword}', [KeywordGroupApiController::class, 'detachKeyword'])->name('keyword-groups.keywords.detach');
     });

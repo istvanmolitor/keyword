@@ -37,6 +37,8 @@ class UpdateKeywordRequest extends FormRequest
                 'exists:keywords,id',
                 Rule::notIn([$keywordId]),
             ],
+            'group_ids' => 'nullable|array',
+            'group_ids.*' => 'integer|exists:keyword_groups,id',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Molitor\Keyword\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class KeywordGroup extends Model
@@ -20,4 +21,9 @@ class KeywordGroup extends Model
         'name',
         'slug',
     ];
+
+    public function keywords(): BelongsToMany
+    {
+        return $this->belongsToMany(Keyword::class);
+    }
 }

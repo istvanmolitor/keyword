@@ -20,6 +20,7 @@ class KeywordResource extends JsonResource
                 'name' => $this->aliasKeyword->name,
             ] : null),
             'keywordables_count' => (int) ($this->keywordables_count ?? 0),
+            'group_ids' => $this->whenLoaded('groups', fn () => $this->groups->pluck('id')->toArray()),
         ];
     }
 }

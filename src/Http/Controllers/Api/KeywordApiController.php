@@ -12,6 +12,7 @@ use Molitor\Keyword\Http\Requests\UpdateKeywordRequest;
 use Molitor\Keyword\Http\Resources\KeywordResource;
 use Molitor\Keyword\Http\Resources\KeywordSimpleResource;
 use Molitor\Keyword\Models\Keyword;
+use Molitor\Keyword\Models\KeywordGroup;
 
 class KeywordApiController extends Controller
 {
@@ -58,7 +59,7 @@ class KeywordApiController extends Controller
 
     public function edit(Keyword $keyword): JsonResponse
     {
-        $keyword->load('aliasKeyword');
+        $keyword->load(['aliasKeyword', 'groups']);
 
         return response()->json([
             'data' => new KeywordResource($keyword),
@@ -68,6 +69,7 @@ class KeywordApiController extends Controller
                     ->orderBy('name')
                     ->get()
             ),
+            'keyword_groups' => KeywordGroup::query()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -99,7 +101,9 @@ class KeywordApiController extends Controller
             'alias_keyword_id' => $validated['alias_keyword_id'] ?? null,
         ]);
 
-        $keyword->load('aliasKeyword');
+        $keyword->groups()->sync($validated['group_ids'] ?? []);
+
+        $keyword->load(['aliasKeyword', 'groups']);
 
         return response()->json([
             'data' => new KeywordResource($keyword),

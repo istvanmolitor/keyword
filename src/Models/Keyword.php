@@ -4,6 +4,7 @@ namespace Molitor\Keyword\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -39,5 +40,10 @@ class Keyword extends Model
     public function replacedKeywords(): HasMany
     {
         return $this->hasMany(Keyword::class, 'alias_keyword_id');
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(KeywordGroup::class);
     }
 }
