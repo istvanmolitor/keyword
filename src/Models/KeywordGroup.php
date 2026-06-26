@@ -20,6 +20,11 @@ class KeywordGroup extends Model
     protected $fillable = [
         'name',
         'slug',
+        'is_public',
+    ];
+
+    protected $casts = [
+        'is_public' => 'boolean',
     ];
 
     public function keywords(): BelongsToMany

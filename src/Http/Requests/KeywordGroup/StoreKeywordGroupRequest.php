@@ -16,6 +16,7 @@ class StoreKeywordGroupRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:keyword_groups,name',
             'slug' => 'required|string|max:255|unique:keyword_groups,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            'is_public' => 'boolean',
         ];
     }
 }

@@ -13,6 +13,7 @@ class KeywordGroupResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'is_public' => $this->is_public,
             'keywords' => $this->whenLoaded('keywords', fn () => $this->keywords->map(fn ($k) => [
                 'id' => $k->id,
                 'name' => $k->name,

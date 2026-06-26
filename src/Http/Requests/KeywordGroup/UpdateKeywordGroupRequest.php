@@ -30,6 +30,7 @@ class UpdateKeywordGroupRequest extends FormRequest
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
                 Rule::unique('keyword_groups', 'slug')->ignore($groupId),
             ],
+            'is_public' => 'boolean',
         ];
     }
 }
