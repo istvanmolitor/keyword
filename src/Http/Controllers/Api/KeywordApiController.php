@@ -4,9 +4,10 @@ namespace Molitor\Keyword\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Molitor\Admin\Traits\HasAdminFilters;
+use Molitor\Keyword\DataTables\KeywordDataTable;
 use Molitor\Keyword\Http\Requests\StoreKeywordRequest;
 use Molitor\Keyword\Http\Requests\UpdateKeywordRequest;
 use Molitor\Keyword\Http\Resources\KeywordResource;
@@ -18,25 +19,9 @@ class KeywordApiController extends Controller
 {
     use HasAdminFilters;
 
-    public function index(Request $request): JsonResponse
+    public function index(KeywordDataTable $dataTable): AnonymousResourceCollection
     {
-        $query = Keyword::query()
-            ->with('aliasKeyword')
-            ->select('keywords.*', DB::raw('(SELECT COUNT(*) FROM keywordables WHERE keywordables.keyword_id = keywords.id) as keywordables_count'));
-        $keywords = $this->applyAdminFilters($query, $request, ['name'])
-            ->paginate(10)
-            ->withQueryString();
-
-        return response()->json([
-            'data' => KeywordResource::collection($keywords->items()),
-            'meta' => [
-                'current_page' => $keywords->currentPage(),
-                'last_page' => $keywords->lastPage(),
-                'per_page' => $keywords->perPage(),
-                'total' => $keywords->total(),
-            ],
-            'filters' => $request->only(['search', 'sort', 'direction']),
-        ]);
+        return $dataTable->getResponse();
     }
 
     public function create(): JsonResponse
