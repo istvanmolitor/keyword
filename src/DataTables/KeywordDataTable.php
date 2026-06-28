@@ -22,6 +22,11 @@ class KeywordDataTable extends DataTable
         return KeywordResource::class;
     }
 
+    protected function getSearchPlaceholder(): string
+    {
+        return 'Keresés kulcsszó alapján...';
+    }
+
     protected function initColumns(): void
     {
         $this->addColumn('name')->setSearchable()->setOrderable();

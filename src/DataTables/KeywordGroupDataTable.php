@@ -20,6 +20,11 @@ class KeywordGroupDataTable extends DataTable
         return KeywordGroupResource::class;
     }
 
+    protected function getSearchPlaceholder(): string
+    {
+        return 'Keresés csoport neve alapján...';
+    }
+
     protected function initColumns(): void
     {
         $this->addColumn('name')->setSearchable()->setOrderable();
