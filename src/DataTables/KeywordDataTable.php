@@ -27,9 +27,9 @@ class KeywordDataTable extends DataTable
         $this->addColumn('name')->setSearchable()->setOrderable();
     }
 
-    protected function getBaseQuery(): Builder
+    public function query(Builder $query): Builder
     {
-        return Keyword::query()
+        return $query
             ->with('aliasKeyword')
             ->select('keywords.*', DB::raw('(SELECT COUNT(*) FROM keywordables WHERE keywordables.keyword_id = keywords.id) as keywordables_count'));
     }
