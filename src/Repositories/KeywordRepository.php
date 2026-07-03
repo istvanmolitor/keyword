@@ -2,6 +2,7 @@
 
 namespace Molitor\Keyword\Repositories;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Molitor\Keyword\Models\Keyword;
 
@@ -19,6 +20,18 @@ class KeywordRepository implements KeywordRepositoryInterface
     public function all(): LazyCollection
     {
         return $this->keyword->orderByRaw('LENGTH(name) DESC')->cursor();
+    }
+
+    public function getMostUsed(int $limit): Collection
+    {
+        return $this->keyword
+            ->select('keywords.*')
+            ->selectRaw('count(keywordables.keyword_id) as usage_count')
+            ->join('keywordables', 'keywordables.keyword_id', '=', 'keywords.id')
+            ->groupBy('keywords.id')
+            ->orderByDesc('usage_count')
+            ->limit($limit)
+            ->get();
     }
 
     public function getById(int $id): ?Keyword

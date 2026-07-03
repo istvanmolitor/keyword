@@ -2,12 +2,15 @@
 
 namespace Molitor\Keyword\Repositories;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Molitor\Keyword\Models\Keyword;
 
 interface KeywordRepositoryInterface
 {
     public function all(): LazyCollection;
+
+    public function getMostUsed(int $limit): Collection;
 
     public function getById(int $id): ?Keyword;
 
