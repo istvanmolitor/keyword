@@ -2,10 +2,19 @@
 
 namespace Molitor\Keyword\Repositories;
 
+use Illuminate\Support\Collection;
 use Molitor\Keyword\Models\KeywordGroup;
 
 class KeywordGroupRepository implements KeywordGroupRepositoryInterface
 {
+    public function getAll(): Collection
+    {
+        return KeywordGroup::where('is_public', true)
+            ->with('keywords')
+            ->orderBy('name')
+            ->get();
+    }
+
     public function getById(int $id): ?KeywordGroup
     {
         return KeywordGroup::find($id);

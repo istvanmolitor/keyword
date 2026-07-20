@@ -2,8 +2,10 @@
 
 namespace Molitor\Keyword\Repositories;
 
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Str;
 use Molitor\Keyword\Models\Keyword;
 
 class KeywordRepository implements KeywordRepositoryInterface
@@ -47,9 +49,17 @@ class KeywordRepository implements KeywordRepositoryInterface
     public function getByName(string $name): ?Keyword
     {
         if (!isset($this->cache[$name])) {
-            $keyword = $this->keyword->where('name', $name)->first();
+            $slug = Str::slug($name);
+
+            $keyword = $this->keyword->where('name', $name)->first()
+                ?? $this->keyword->where('slug', $slug)->first();
+
             if (!$keyword) {
-                $keyword = $this->keyword->create(['name' => $name]);
+                try {
+                    $keyword = $this->keyword->create(['name' => $name]);
+                } catch (UniqueConstraintViolationException) {
+                    $keyword = $this->keyword->where('slug', $slug)->first();
+                }
             }
 
             $this->cache[$name] = $keyword;
